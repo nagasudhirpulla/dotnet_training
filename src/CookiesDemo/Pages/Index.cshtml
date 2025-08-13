@@ -4,7 +4,33 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<p>
+    This demo stores todo list items in a browser cookie
+</p>
+
+@if (Model.Todos.Any())
+{
+    <h2>Todos List</h2>
+    <ul>
+        @foreach (var todo in Model.Todos)
+        {
+            <li>@todo.Name</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No todos present.</p>
+}
+
+<form method="post">
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="NewTodo.Name" class="form-label">Add Todo</label>
+        <input asp-for="NewTodo.Name" class="form-control" placeholder="Enter here" />
+        <span asp-validation-for="NewTodo.Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success mb-1">Add</button>
+</form>

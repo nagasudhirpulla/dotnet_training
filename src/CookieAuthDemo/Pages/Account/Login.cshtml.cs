@@ -9,23 +9,27 @@ namespace CookieAuthDemo.Pages.Account;
 
 public class LoginModel(ILogger<LoginModel> _logger) : PageModel
 {
-    public async Task OnGetAsync(string? returnUrl)
+    public IActionResult OnGet(string? returnUrl)
     {
-        // Clear the existing cookie
-        await HttpContext.SignOutAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme);
+        if (HttpContext.User?.Identity?.IsAuthenticated ?? false)
+        {
+            return LocalRedirect(Url.GetLocalUrl(returnUrl));
+            // You can also clear the existing cookie and signout user instead of redirecting
+            // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        }
 
-        ReturnUrl = returnUrl;
+        ReturnUrl = returnUrl ?? Url.Content("~/");
+        return Page();
     }
 
     [BindProperty]
     public required InputModel Input { get; set; }
 
-    public string? ReturnUrl { get; set; }
+    public required string ReturnUrl { get; set; }
 
     public async Task<IActionResult> OnPostAsync(string? returnUrl)
     {
-        ReturnUrl = returnUrl;
+        ReturnUrl = returnUrl ?? Url.Content("~/");
 
         if (ModelState.IsValid)
         {
@@ -93,18 +97,16 @@ public class LoginModel(ILogger<LoginModel> _logger) : PageModel
         await Task.Delay(500);
 
         // dummy user authentication logic
-        if (email == "jamesbond@acme.com")
-        {
-            return new ApplicationUser()
-            {
-                Email = "jamesbond@acme.com",
-                FullName = "James Bond"
-            };
-        }
-        else
+        if (email != "jamesbond@acme.com")
         {
             return null;
         }
+
+        return new ApplicationUser()
+        {
+            Email = "jamesbond@acme.com",
+            FullName = "James Bond"
+        };
     }
 }
 
@@ -131,7 +133,8 @@ public static class UrlHelperExtensions
     {
         if (!urlHelper.IsLocalUrl(localUrl))
         {
-            return urlHelper.Page($"/{nameof(Index)}");
+            // ! is the null-forgiving operator
+            return urlHelper.Page($"/{nameof(Index)}")!;
         }
 
         return localUrl;

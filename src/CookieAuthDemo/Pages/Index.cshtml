@@ -6,4 +6,20 @@
 
 <div class="text-center">
     <p>Demo for authenticating user with Cookies using HttpContext.SignInAsync</p>
+    <ul>
+    </ul>
+    <p>
+        @if (HttpContext.User?.Identity?.IsAuthenticated ?? false)
+        {
+            <span>Welcome, @HttpContext.User.Identity.Name!</span>
+            <br />
+            <a asp-page="/Account/Logout">Logout</a>
+        }
+        else
+        {
+            <span>You are not logged in.</span>
+            <br />
+            <a asp-page="/Account/Login" asp-route-returnUrl="@Url.Page("/Index")">Login</a>
+        }
+    </p>
 </div>

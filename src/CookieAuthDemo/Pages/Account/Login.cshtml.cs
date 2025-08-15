@@ -9,19 +9,21 @@ namespace CookieAuthDemo.Pages.Account;
 
 public class LoginModel(ILogger<LoginModel> _logger) : PageModel
 {
-    public void OnGet()
+    public async Task OnGetAsync(string? returnUrl)
     {
+        // Clear the existing cookie
+        await HttpContext.SignOutAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme);
+
+        ReturnUrl = returnUrl;
     }
 
     [BindProperty]
-    public InputModel Input { get; set; }
+    public required InputModel Input { get; set; }
 
-    public string ReturnUrl { get; set; }
+    public string? ReturnUrl { get; set; }
 
-    [TempData]
-    public string ErrorMessage { get; set; }
-
-    public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+    public async Task<IActionResult> OnPostAsync(string? returnUrl)
     {
         ReturnUrl = returnUrl;
 
@@ -84,20 +86,19 @@ public class LoginModel(ILogger<LoginModel> _logger) : PageModel
         return Page();
     }
 
-    private async Task<ApplicationUser> AuthenticateUser(string email, string password)
+    private static async Task<ApplicationUser?> AuthenticateUser(string email, string password)
     {
-        // For demonstration purposes, authenticate a user
-        // with a static email address. Ignore the password.
-        // Assume that checking the database takes 500ms
 
+        // simulate 500 ms delay to mimic a database call
         await Task.Delay(500);
 
-        if (email == "maria.rodriguez@contoso.com")
+        // dummy user authentication logic
+        if (email == "jamesbond@acme.com")
         {
             return new ApplicationUser()
             {
-                Email = "maria.rodriguez@contoso.com",
-                FullName = "Maria Rodriguez"
+                Email = "jamesbond@acme.com",
+                FullName = "James Bond"
             };
         }
         else
@@ -111,11 +112,11 @@ public class InputModel
 {
     [Required]
     [EmailAddress]
-    public string Email { get; set; }
+    public required string Email { get; set; }
 
     [Required]
     [DataType(DataType.Password)]
-    public string Password { get; set; }
+    public required string Password { get; set; }
 }
 
 public class ApplicationUser
@@ -126,11 +127,11 @@ public class ApplicationUser
 
 public static class UrlHelperExtensions
 {
-    public static string GetLocalUrl(this IUrlHelper urlHelper, string localUrl)
+    public static string GetLocalUrl(this IUrlHelper urlHelper, string? localUrl)
     {
         if (!urlHelper.IsLocalUrl(localUrl))
         {
-            return urlHelper.Page("/Index");
+            return urlHelper.Page($"/{nameof(Index)}");
         }
 
         return localUrl;

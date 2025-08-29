@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookieAuthDemo", "src\CookieAuthDemo\CookieAuthDemo.csproj", "{ACAF593E-14F8-4645-82A8-5D6270610499}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DIConsoleAppDemo", "src\DIConsoleAppDemo\DIConsoleAppDemo.csproj", "{C303A68C-E0C6-4542-A4F5-9B621EB7251C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,8 +28,15 @@ Global
 		{ACAF593E-14F8-4645-82A8-5D6270610499}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACAF593E-14F8-4645-82A8-5D6270610499}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACAF593E-14F8-4645-82A8-5D6270610499}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C303A68C-E0C6-4542-A4F5-9B621EB7251C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C303A68C-E0C6-4542-A4F5-9B621EB7251C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C303A68C-E0C6-4542-A4F5-9B621EB7251C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C303A68C-E0C6-4542-A4F5-9B621EB7251C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {42ADE0CC-6DF7-48DC-963A-5D3CB42267F1}
 	EndGlobalSection
 EndGlobal

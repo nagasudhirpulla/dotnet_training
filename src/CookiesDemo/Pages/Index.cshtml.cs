@@ -7,7 +7,6 @@ namespace CookiesDemo.Pages;
 
 public class IndexModel(ILogger<IndexModel> logger) : PageModel
 {
-    private readonly ILogger<IndexModel> _logger = logger;
     public List<Todo> Todos { get; set; } = [];
 
     [BindProperty]
@@ -21,7 +20,7 @@ public class IndexModel(ILogger<IndexModel> logger) : PageModel
     private void PersistTodosToCookie(List<Todo> todos)
     {
         Response.Cookies.Append(nameof(Todo), JsonSerializer.Serialize(todos));
-        _logger.LogInformation("Added new TODO: {Todo}", NewTodo.Name);
+        logger.LogInformation("Added new TODO: {Todo}", NewTodo.Name);
     }
 
     public IActionResult OnGet()

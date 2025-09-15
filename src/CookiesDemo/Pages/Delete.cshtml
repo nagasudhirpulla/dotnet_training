@@ -1,0 +1,15 @@
+﻿@page
+@model CookiesDemo.Pages.DeleteModel
+@{
+    ViewData["Title"] = "Delete TODO";
+}
+
+<h2>Are you sure to delete the Todo with the following description?</h2>
+<p>@Model.Todo</p>
+<form method="post">
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input asp-for="Todo" type="hidden" />
+    <input asp-for="TodoInd" type="hidden" />
+    <button type="submit" class="btn btn-danger mb-1">Delete</button>
+</form>

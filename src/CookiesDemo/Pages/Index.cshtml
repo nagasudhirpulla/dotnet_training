@@ -11,12 +11,17 @@
 @if (Model.Todos.Any())
 {
     <h2>Todos List</h2>
-    <ul>
-        @foreach (var todo in Model.Todos)
-        {
-            <li>@todo.Name</li>
-        }
-    </ul>
+    <table>
+        <tbody>
+            @foreach ((Entities.Todo todo, int ind) in Model.Todos.Select((todo, index) => (todo, index)))
+            {
+                <tr>
+                    <td>@todo.Name</td>
+                    <td><a asp-page="/Delete" asp-route-id="@ind">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 else
 {

@@ -5,7 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-// Add Cookie Authentication middleware
+
+// Add Cookie Authentication service
+// AddAuthentication adds the authentication service to DI container. It also specifies the default authentication scheme (Cookies) for authentication.
+// AddCookie provides a cookie authentication handler for the Cookies authentication scheme
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -14,8 +17,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set the cookie expiration time
         options.SlidingExpiration = true; // Enable sliding expiration
     });
-// AddAuthentication adds required services for authentication. It also specifies the default authentication scheme to be used for authentication.
-// AddCookie provides an authentication handler (that uses cookies) for the 'CookieAuthenticationDefaults.AuthenticationScheme' scheme.
+
+// Add Authorization service
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("AdminOnly", policy =>
+        policy.RequireRole("Admin")
+              .RequireClaim("EmployeeId"));
 
 var app = builder.Build();
 
@@ -31,7 +38,10 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+// Enable authentication middlware
 app.UseAuthentication();
+
+// Enable authorization middlware
 app.UseAuthorization();
 
 app.MapStaticAssets();

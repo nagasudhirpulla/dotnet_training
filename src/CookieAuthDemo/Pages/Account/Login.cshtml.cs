@@ -14,6 +14,7 @@ public class LoginModel(ILogger<LoginModel> _logger) : PageModel
         if (HttpContext.User?.Identity?.IsAuthenticated ?? false)
         {
             return LocalRedirect(Url.GetLocalUrl(returnUrl));
+
             // You can also clear the existing cookie and signout user instead of redirecting
             // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }

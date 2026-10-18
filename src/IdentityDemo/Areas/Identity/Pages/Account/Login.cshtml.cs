@@ -3,7 +3,6 @@
 
 
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -20,12 +19,6 @@ public class LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel
     /// </summary>
     [BindProperty]
     public InputModel Input { get; set; } = default!;
-
-    /// <summary>
-    ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-    ///     directly from your code. This API may change or be removed in future releases.
-    /// </summary>
-    public IList<AuthenticationScheme>? ExternalLogins { get; set; }
 
     /// <summary>
     ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -51,8 +44,8 @@ public class LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         [Required]
-        [EmailAddress]
-        public string Email { get; set; } = default!;
+        [MaxLength(100)]
+        public string Username { get; set; } = default!;
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -79,25 +72,17 @@ public class LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel
 
         returnUrl ??= Url.Content("~/");
 
-        // Clear the existing external cookie to ensure a clean login process
-        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-        ExternalLogins = [.. (await signInManager.GetExternalAuthenticationSchemesAsync())];
-
-        ReturnUrl = returnUrl;
     }
 
     public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
     {
         returnUrl ??= Url.Content("~/");
 
-        ExternalLogins = [.. (await signInManager.GetExternalAuthenticationSchemesAsync())];
-
         if (ModelState.IsValid)
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-            var result = await signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+            var result = await signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
                 logger.LogInformation("User logged in.");
